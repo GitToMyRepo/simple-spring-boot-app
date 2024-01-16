@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-spring-boot-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simple-spring-boot
+  template:
+    metadata:
+      labels:
+        app: simple-spring-boot
+    spec:
+      containers:
+        - name: simple-spring-boot-container
+          image: simple-spring-boot-app
+          ports:
+            - containerPort: 8080
