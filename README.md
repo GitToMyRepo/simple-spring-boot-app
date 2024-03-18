@@ -1,8 +1,8 @@
-#Simple Spring boot app
+# Simple Spring boot app
 
-##Docker
+## Docker
 
-#Build Docker Image
+### Build Docker Image
 ```
 docker build --tag=simple-spring-boot-app:latest .
 ```
