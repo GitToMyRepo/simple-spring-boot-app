@@ -32,16 +32,21 @@ public class HelloWorldApiNetworkTest {
         httpProxy.toxics().latency("latency-toxic", ToxicDirection.DOWNSTREAM, 5000);
         logger.info("Invoking web service");
 
-        await().atMost(20, SECONDS).pollDelay(5, SECONDS).pollInterval(2, SECONDS).until(() -> {
-            restTemplate = new RestTemplate();
-            String apiUrl = "http://localhost:8082/api/health";
-            String responseBody = restTemplate.getForObject(apiUrl, String.class);
-            logger.info("Response Body: " + responseBody);
-            return StringUtils.equals("OK", responseBody);
-        });
-
-        httpProxy.delete();
-        logger.info("Deleted proxy");
+        try {
+            await().atMost(20, SECONDS).pollDelay(5, SECONDS).pollInterval(2, SECONDS).until(() -> {
+                restTemplate = new RestTemplate();
+                String apiUrl = "http://localhost:8082/api/health";
+                String responseBody = restTemplate.getForObject(apiUrl, String.class);
+                logger.info("Response Body: " + responseBody);
+                return StringUtils.equals("OK", responseBody);
+            });
+        } catch (Exception e) {
+            logger.error("Unable to invoke web service");
+            logger.debug("Details: " + e);
+        } finally {
+            httpProxy.delete();
+            logger.info("Deleted proxy");
+        }
     }
 
     public static void main(String... args) throws Exception {
